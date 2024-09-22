@@ -1,5 +1,6 @@
-import { BranchSummary } from '@/services/gitService/types';
 import simpleGit from 'simple-git';
+
+import { BranchSummary } from '@/services/gitService/types';
 
 const git = simpleGit();
 
