@@ -1,6 +1,9 @@
-import simpleGit from 'simple-git';
+import simpleGit, { GitError as SimpleGitError } from 'simple-git';
 
-import { BranchSummary } from '@/services/gitService/types';
+import { type BranchSummary } from '@/services/gitService/types';
+
+import { GitError } from '@/shared/errors';
+import { unexpectedErrorIn } from '@/shared/errors/helpers';
 
 const git = simpleGit();
 
@@ -14,7 +17,22 @@ const createGitService = () => ({
   },
 
   getLocalBranches: async (): Promise<BranchSummary> => {
-    return await git.branchLocal();
+    try {
+      return await git.branchLocal();
+    } catch (error) {
+      if (error instanceof SimpleGitError) {
+        const commands = error.task?.commands;
+
+        throw new GitError(error.message, {
+          options: {
+            cause: error,
+            details: { commands },
+          },
+        });
+      }
+
+      throw unexpectedErrorIn('getLocalBranches');
+    }
   },
 
   restoreBranches: (_branches: string[] | string) => {
