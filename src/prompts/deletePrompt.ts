@@ -15,10 +15,9 @@ import { BranchSummary } from '@/services/gitService/types';
 import { COMMAND_KEYS } from '@/shared/constants';
 import { wrapi } from '@/shared/helpers';
 
-import { Container } from '@/container';
+import container from '@/container';
 
 type DeletePromptConfig = {
-  container: Container;
   branchSummary: BranchSummary;
 };
 
@@ -31,6 +30,7 @@ type KeypressEvent = {
 };
 
 const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) => {
+  const { EventBus } = container;
   const { all, current } = config.branchSummary;
 
   const [currentSelection, setCurrentSelection] = useState<number>(0);
@@ -82,7 +82,7 @@ const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) =>
     const keyName = key.name;
 
     if (isKeyInCommandKeys(COMMAND_KEYS.QUIT.keys, keyName)) {
-      //
+      EventBus.emit('quit-prompt');
     }
 
     if (isKeyInCommandKeys(COMMAND_KEYS.SELECT_NEXT.keys, keyName)) {

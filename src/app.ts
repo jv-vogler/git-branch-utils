@@ -4,12 +4,16 @@ import container from '@/container';
 
 export default {
   start: async () => {
-    const { Git } = container;
+    const { Git, EventBus } = container;
 
     const result = await Git.getLocalBranches();
 
+    EventBus.on('quit-prompt', () => {
+      //
+    });
+
     try {
-      await deletePrompt({ container, branchSummary: result });
+      await deletePrompt({ branchSummary: result });
     } catch (_) {
       //
     }

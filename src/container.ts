@@ -1,3 +1,5 @@
+import { EventEmitter } from 'node:events';
+
 import {
   createCommandService,
   createEventBusService,
@@ -5,9 +7,11 @@ import {
   createPromptService,
 } from '@/services';
 
+const eventBus = new EventEmitter();
+
 const commandService = createCommandService();
 const gitService = createGitService();
-const eventBusService = createEventBusService();
+const eventBusService = createEventBusService({ eventBus });
 const promptService = createPromptService();
 
 const container = {
