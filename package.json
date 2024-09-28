@@ -1,7 +1,7 @@
 {
   "name": "gbu",
   "version": "0.0.2",
-  "description": "",
+  "description": "Manage your local git branches with ease.",
   "type": "module",
   "engines": {
     "node": ">=20.17.0"
@@ -53,6 +53,10 @@
     "delete",
     "rename"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jv-vogler/git-branch-utils"
+  },
   "author": "João Vogler",
   "license": "MIT"
 }
