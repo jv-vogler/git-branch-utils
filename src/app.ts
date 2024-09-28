@@ -12,6 +12,14 @@ export default {
       //
     });
 
+    EventBus.on('delete-branch', (branchName) => {
+      EventBus.emit('branch-deleted', branchName);
+    });
+
+    EventBus.on('restore-branch', (branchName) => {
+      EventBus.emit('branch-restored', branchName);
+    });
+
     try {
       await deletePrompt({ branchSummary: result });
     } catch (_) {

@@ -1,13 +1,14 @@
 import {
   createPrompt,
   makeTheme,
+  useEffect,
   useKeypress,
   useMemo,
   usePagination,
   useState,
 } from '@inquirer/core';
 import figures from '@inquirer/figures';
-import { cursorHide } from 'ansi-escapes';
+import { clearScreen, cursorHide } from 'ansi-escapes';
 import colors from 'yoctocolors';
 
 import { BranchSummary } from '@/services/gitService/types';
@@ -32,6 +33,7 @@ type KeypressEvent = {
 const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) => {
   const { EventBus } = container;
   const { all, current } = config.branchSummary;
+  const MAX_INDEX = all.length - 2;
 
   const [currentSelection, setCurrentSelection] = useState<number>(0);
   const [deletedBranches, setDeletedBranches] = useState<string[]>([]);
@@ -44,11 +46,19 @@ const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) =>
     },
   });
 
+  useEffect(() => {
+    EventBus.on('branch-deleted', deleteBranch);
+    EventBus.on('branch-restored', restoreBranch);
+
+    return () => {
+      EventBus.off('branch-deleted', deleteBranch);
+      EventBus.off('branch-restored', restoreBranch);
+    };
+  }, [EventBus, deletedBranches]);
+
   const branchNames = useMemo(() => {
     return all.filter((branch) => branch !== current);
   }, [all]);
-
-  const MAX_INDEX = all.length - 2;
 
   const isBranchDeleted = (index: number) => {
     return deletedBranches.includes(branchNames[index] ?? '');
@@ -97,9 +107,9 @@ const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) =>
       const currentSelectedBranchName = branchNames[currentSelection] ?? '';
 
       if (isBranchDeleted(currentSelection)) {
-        restoreBranch(currentSelectedBranchName);
+        EventBus.emit('restore-branch', currentSelectedBranchName);
       } else {
-        deleteBranch(currentSelectedBranchName);
+        EventBus.emit('delete-branch', currentSelectedBranchName);
       }
     }
   });
@@ -124,16 +134,16 @@ const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) =>
   });
 
   const header = `
-  Welcome to ${colors.bold(colors.yellow('G'))}it ${colors.bold(colors.yellow('B'))}ranch ${colors.bold(colors.yellow('U'))}tils!
+  Welcome to ${colors.bold(colors.green('G'))}it ${colors.bold(colors.green('B'))}ranch ${colors.bold(colors.green('U'))}tils!
 
-  ${colors.red('Delete/Restore:')}      [${colors.redBright('Space')}]
-  ${colors.red('Delete/Restore All:')}  [${colors.redBright('Shift + Space')}]
+  ${colors.underline('Delete/Restore')}: [Space]
+            ${colors.underline('Quit')}: [Escape][q]
 `;
   const currentBranchName = colors.bgGreen(
     colors.black(` ${figures.star} ${current} (current branch)`),
   );
 
-  const returnString = `${header}\n${currentBranchName}\n${page}${cursorHide}`;
+  const returnString = `${clearScreen}${header}\n${currentBranchName}\n${page}${cursorHide}`;
 
   return returnString;
 });
