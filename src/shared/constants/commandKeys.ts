@@ -16,7 +16,7 @@ const COMMAND_KEYS = {
     ctrl: false,
   },
   QUIT: {
-    keys: ['escape', 'q'],
+    keys: ['q'],
     ctrl: false,
   },
 } as const;

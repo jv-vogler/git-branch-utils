@@ -7,7 +7,6 @@ type EventMap = {
   'branch-deleted': string;
   'restore-branch': BranchMetadata;
   'branch-restored': string;
-  'quit-prompt': undefined;
 };
 
 type AppEvent = keyof EventMap;

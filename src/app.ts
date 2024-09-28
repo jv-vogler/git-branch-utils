@@ -8,10 +8,6 @@ export default {
 
     const result = await Git.getLocalBranches();
 
-    EventBus.on('quit-prompt', () => {
-      //
-    });
-
     EventBus.on('delete-branch', async (branchName) => {
       try {
         await Git.deleteLocalBranches(branchName);

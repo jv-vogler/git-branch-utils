@@ -30,7 +30,7 @@ type KeypressEvent = {
   meta: boolean;
 };
 
-const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) => {
+const deletePrompt = createPrompt<boolean, DeletePromptConfig>((config, done) => {
   const { EventBus } = container;
   const { all, current, branches } = config.branchSummary;
   const MAX_INDEX = all.length - 2;
@@ -93,7 +93,7 @@ const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) =>
     const keyName = key.name;
 
     if (isKeyInCommandKeys(COMMAND_KEYS.QUIT.keys, keyName)) {
-      EventBus.emit('quit-prompt');
+      done(true);
     }
 
     if (isKeyInCommandKeys(COMMAND_KEYS.SELECT_NEXT.keys, keyName)) {
@@ -141,7 +141,7 @@ const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) =>
   Welcome to ${colors.bold(colors.green('G'))}it ${colors.bold(colors.green('B'))}ranch ${colors.bold(colors.green('U'))}tils!
 
   ${colors.underline('Delete/Restore')}: [Space]
-            ${colors.underline('Quit')}: [Escape][q]
+            ${colors.underline('Quit')}: [q]
 `;
   const currentBranchName = colors.bgGreen(
     colors.black(` ${figures.star} ${current} (current branch)`),
