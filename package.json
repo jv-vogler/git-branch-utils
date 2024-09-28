@@ -26,12 +26,12 @@
   "dependencies": {
     "@inquirer/core": "^9.1.0",
     "@inquirer/figures": "^1.0.6",
+    "ansi-escapes": "^7.0.0",
     "simple-git": "^3.26.0",
     "yoctocolors": "^2.1.1"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "ansi-escapes": "^7.0.0",
     "esbuild": "^0.23.1",
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
