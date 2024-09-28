@@ -1,9 +1,11 @@
 import { createEventBusService } from '@/services';
 
+import { BranchMetadata } from '@/shared/types';
+
 type EventMap = {
   'delete-branch': string;
   'branch-deleted': string;
-  'restore-branch': string;
+  'restore-branch': BranchMetadata;
   'branch-restored': string;
   'quit-prompt': undefined;
 };

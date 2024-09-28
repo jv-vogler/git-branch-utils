@@ -16,7 +16,10 @@ type Dependencies = {
 };
 
 const createEventBusService = ({ eventBus }: Dependencies) => ({
-  emit(event: AppEvent, ...args: unknown[]) {
+  emit<K extends keyof EventMap>(
+    event: K,
+    ...args: EventMap[K] extends undefined ? [] : [EventMap[K]]
+  ) {
     return eventBus.emit(event, ...args);
   },
 

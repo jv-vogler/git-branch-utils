@@ -12,12 +12,22 @@ export default {
       //
     });
 
-    EventBus.on('delete-branch', (branchName) => {
-      EventBus.emit('branch-deleted', branchName);
+    EventBus.on('delete-branch', async (branchName) => {
+      try {
+        await Git.deleteLocalBranches(branchName);
+        EventBus.emit('branch-deleted', branchName);
+      } catch (error) {
+        console.log('Error deleting branch: ', error);
+      }
     });
 
-    EventBus.on('restore-branch', (branchName) => {
-      EventBus.emit('branch-restored', branchName);
+    EventBus.on('restore-branch', async (branchMetadata) => {
+      try {
+        await Git.restoreLocalBranch(branchMetadata);
+        EventBus.emit('branch-restored', branchMetadata.name);
+      } catch (error) {
+        console.log('Error deleting branch: ', error);
+      }
     });
 
     try {

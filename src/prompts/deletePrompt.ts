@@ -32,7 +32,7 @@ type KeypressEvent = {
 
 const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) => {
   const { EventBus } = container;
-  const { all, current } = config.branchSummary;
+  const { all, current, branches } = config.branchSummary;
   const MAX_INDEX = all.length - 2;
 
   const [currentSelection, setCurrentSelection] = useState<number>(0);
@@ -88,6 +88,7 @@ const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) =>
 
   // TODO - refactor key logic
   // @ts-expect-error: Type provided by the library is wrong https://github.com/SBoudrias/Inquirer.js/blob/main/packages/core/src/lib/key.mts
+  // eslint-disable-next-line complexity
   useKeypress((key: KeypressEvent) => {
     const keyName = key.name;
 
@@ -107,7 +108,10 @@ const deletePrompt = createPrompt<string, DeletePromptConfig>((config, _done) =>
       const currentSelectedBranchName = branchNames[currentSelection] ?? '';
 
       if (isBranchDeleted(currentSelection)) {
-        EventBus.emit('restore-branch', currentSelectedBranchName);
+        EventBus.emit('restore-branch', {
+          name: currentSelectedBranchName,
+          commit: branches[currentSelectedBranchName]?.commit ?? '',
+        });
       } else {
         EventBus.emit('delete-branch', currentSelectedBranchName);
       }

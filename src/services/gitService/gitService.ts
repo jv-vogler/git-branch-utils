@@ -4,16 +4,49 @@ import { type BranchSummary } from '@/services/gitService/types';
 
 import { GitError } from '@/shared/errors';
 import { unexpectedErrorIn } from '@/shared/errors/helpers';
+import { BranchMetadata } from '@/shared/types';
 
 const git = simpleGit();
 
 const createGitService = () => ({
-  checkoutBranch: (_branchName: string) => {
-    return;
+  deleteLocalBranches: async (branches: string[] | string) => {
+    try {
+      const localBranches = typeof branches === 'string' ? [branches] : branches;
+
+      await git.deleteLocalBranches(localBranches, true);
+    } catch (error) {
+      if (error instanceof SimpleGitError) {
+        const commands = error.task?.commands;
+
+        throw new GitError(error.message, {
+          options: {
+            cause: error,
+            details: { commands },
+          },
+        });
+      }
+
+      throw unexpectedErrorIn('deleteLocalBranches');
+    }
   },
 
-  deleteLocalBranches: (_branches: string[] | string) => {
-    return;
+  restoreLocalBranch: async (branch: BranchMetadata) => {
+    try {
+      await git.branch([branch.name, branch.commit]);
+    } catch (error) {
+      if (error instanceof SimpleGitError) {
+        const commands = error.task?.commands;
+
+        throw new GitError(error.message, {
+          options: {
+            cause: error,
+            details: { commands },
+          },
+        });
+      }
+
+      throw unexpectedErrorIn('restoreLocalBranch');
+    }
   },
 
   getLocalBranches: async (): Promise<BranchSummary> => {
@@ -33,10 +66,6 @@ const createGitService = () => ({
 
       throw unexpectedErrorIn('getLocalBranches');
     }
-  },
-
-  restoreBranches: (_branches: string[] | string) => {
-    return;
   },
 });
 
