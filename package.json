@@ -1,6 +1,6 @@
 {
-  "name": "git-branch-utils",
-  "version": "0.0.1",
+  "name": "gbu",
+  "version": "0.0.0",
   "description": "",
   "type": "module",
   "engines": {
@@ -26,7 +26,6 @@
   "dependencies": {
     "@inquirer/core": "^9.1.0",
     "@inquirer/figures": "^1.0.6",
-    "@inquirer/type": "^1.5.5",
     "simple-git": "^3.26.0",
     "yoctocolors": "^2.1.1"
   },

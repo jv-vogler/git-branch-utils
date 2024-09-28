@@ -14,9 +14,6 @@ importers:
       '@inquirer/figures':
         specifier: ^1.0.6
         version: 1.0.6
-      '@inquirer/type':
-        specifier: ^1.5.5
-        version: 1.5.5
       simple-git:
         specifier: ^3.26.0
         version: 3.26.0
