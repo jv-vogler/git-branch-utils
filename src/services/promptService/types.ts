@@ -1,3 +1,5 @@
 import { createPromptService } from '@/services';
 
-export type PromptService = ReturnType<typeof createPromptService>;
+type PromptService = ReturnType<typeof createPromptService>;
+
+export type { PromptService };

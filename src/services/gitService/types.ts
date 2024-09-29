@@ -1,8 +1,8 @@
 import { createGitService } from '@/services';
 
-export type GitService = ReturnType<typeof createGitService>;
+type GitService = ReturnType<typeof createGitService>;
 
-export type BranchSummaryBranch = {
+type BranchSummaryBranch = {
   current: boolean;
   name: string;
   commit: string;
@@ -10,9 +10,11 @@ export type BranchSummaryBranch = {
   linkedWorkTree: boolean;
 };
 
-export type BranchSummary = {
+type BranchSummary = {
   detached: boolean;
   current: string;
   all: string[];
   branches: Record<string, BranchSummaryBranch>;
 };
+
+export type { GitService, BranchSummary, BranchSummaryBranch };
