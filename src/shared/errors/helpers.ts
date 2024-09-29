@@ -1,12 +1,12 @@
 type ErrorKeysFactory = typeof errorKeysFactory;
 
-type ErrorName = keyof ErrorKeysFactory;
+type ErrorName = 'Error' | keyof ErrorKeysFactory;
 
 type ErrorKeys = ReturnType<ErrorKeysFactory[keyof ErrorKeysFactory]>;
 
 const errorKeysFactory = {
   // Base Error
-  AppError: () => ['AppError'] as const,
+  AppError: () => ['Error', 'AppError'] as const,
 
   // Git Errors
   GitError: () => [...errorKeysFactory.AppError(), 'GitError'] as const,
