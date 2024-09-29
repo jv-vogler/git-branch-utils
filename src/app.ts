@@ -6,31 +6,23 @@ export default {
   start: async () => {
     const { Git, EventBus } = container;
 
-    const result = await Git.getLocalBranches();
-
     EventBus.on('delete-branch', async (branchName) => {
-      try {
-        await Git.deleteLocalBranches(branchName);
-        EventBus.emit('branch-deleted', branchName);
-      } catch (error) {
-        console.log('Error deleting branch: ', error);
-      }
+      await Git.deleteLocalBranches(branchName);
+      EventBus.emit('branch-deleted', branchName);
     });
 
     EventBus.on('restore-branch', async (branchMetadata) => {
-      try {
-        await Git.restoreLocalBranch(branchMetadata);
-        EventBus.emit('branch-restored', branchMetadata.name);
-      } catch (error) {
-        console.log('Error deleting branch: ', error);
-      }
+      await Git.restoreLocalBranch(branchMetadata);
+      EventBus.emit('branch-restored', branchMetadata.name);
     });
 
-    try {
-      await deletePrompt({ branchSummary: result });
-    } catch (_) {
-      //
+    const result = await Git.getLocalBranches();
+
+    if (result.all.length <= 1) {
+      throw new Error('No branches to delete');
     }
+
+    await deletePrompt({ branchSummary: result });
 
     return;
   },

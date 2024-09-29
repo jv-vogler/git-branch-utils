@@ -8,7 +8,7 @@ import {
   useState,
 } from '@inquirer/core';
 import figures from '@inquirer/figures';
-import { clearScreen, cursorHide } from 'ansi-escapes';
+import { cursorHide } from 'ansi-escapes';
 import colors from 'yoctocolors';
 
 import { BranchSummary } from '@/services/gitService/types';
@@ -147,7 +147,7 @@ const deletePrompt = createPrompt<boolean, DeletePromptConfig>((config, done) =>
     colors.black(` ${figures.star} ${current} (current branch)`),
   );
 
-  const returnString = `${clearScreen}${header}\n${currentBranchName}\n${page}${cursorHide}`;
+  const returnString = `${header}\n${currentBranchName}\n${page}${cursorHide}`;
 
   return returnString;
 });
